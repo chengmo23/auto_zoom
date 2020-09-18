@@ -15,7 +15,8 @@ Since I always forget to attend zoom lessons while busy at other stuffs, so I cr
 - download the ZIP and decompressed it
 - nevigate to the right directory and type in `py auto_zoom.py` in the command prompt
 
-# Other functions to add?
+# Upcoming functions
 
-- GUI with CRUD operations on lessons' details?
-- auto signin ?
+- GUI with CRUD operations on lessons' details
+- auto enter passcode
+- early enter cfg
