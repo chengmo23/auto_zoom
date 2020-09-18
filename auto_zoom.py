@@ -37,7 +37,7 @@ def init_lessons():
             zoom_link = lesson['zoom_link']
             password = lesson['password']
             lessons.append(Lesson(name, LessonTime(
-                time[0], time[1], 0, time[2]), zoom_link, password))
+                int(time[0]), int(time[1]), 0, int(time[2])), zoom_link, password))
 
 
 def parseSecs(lessonTime: LessonTime):
@@ -47,8 +47,8 @@ def parseSecs(lessonTime: LessonTime):
 def parseTime(secs: int):
     hh = int(secs/3600)
     mm = int((secs - hh*3600)/60)
-    ss = secs - hh*3600 - mm*60
-    return datetime(2020, 9, 18, hh, mm, ss)
+    ss = int(secs - hh*3600 - mm*60)
+    return datetime(2020, 9, 18, hh if hh < 24 else 0, mm, ss)
 
 
 def is_lesson_start(lesson: Lesson, now: LessonTime, lose: int):
@@ -63,7 +63,7 @@ def is_lesson_start(lesson: Lesson, now: LessonTime, lose: int):
 
 def countdown_next_check(interval: int, now: LessonTime):
     current_time = parseSecs(now)
-    next_checking_time = interval * (math.ceil(current_time / interval))
+    next_checking_time = int(interval * (math.ceil(current_time / interval)))
     diff = next_checking_time - current_time
     print(f"Next check will be at {parseTime(next_checking_time)}")
     print(f"{diff} seconds until next check")
@@ -79,7 +79,7 @@ terminate = False
 def check(interval: int):
     now = datetime.now()
     now = LessonTime(now.hour, now.minute, now.second, now.weekday())
-    print("checking")
+    print("checking...")
     for lesson in lessons:
         if is_lesson_start(lesson, now, interval):
             subprocess.call(
@@ -94,10 +94,10 @@ def check(interval: int):
         check(interval)
 
 
-print("initializing lessons.")
+print("initializing lessons...")
 init_lessons()
 print(f"{len(lessons)} lessons loaded.")
-thread = threading.Thread(target=check, args=[900, ])
+thread = threading.Thread(target=check, args=[HOUR_IN_SECONDS/4, ])
 thread.start()
 input("enter anything to exit\n")
 terminate = True
