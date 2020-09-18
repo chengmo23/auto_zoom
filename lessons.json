@@ -83,6 +83,12 @@
       "time": "13,30,4",
       "zoom_link": "https://cuhk.zoom.us/j/98941294910",
       "password": "914200"
+    },
+    {
+      "name": "test",
+      "time": "1,03,5",
+      "zoom_link": "",
+      "password": "12345"
     }
   ]
 }

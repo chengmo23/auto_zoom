@@ -65,7 +65,11 @@ def countdown_next_check(interval: int, now: LessonTime):
     current_time = parseSecs(now)
     next_checking_time = int(interval * (math.ceil(current_time / interval)))
     diff = next_checking_time - current_time
-    print(f"Next check will be at {parseTime(next_checking_time)}")
+    if diff == 0:  # current time == lesosn time
+        time.sleep(1)  # avoid overflow
+        return
+    print(f"current time: {parseTime(current_time)}")
+    print(f"Next check time: {parseTime(next_checking_time)}")
     print(f"{diff} seconds until next check")
     time.sleep(diff)
     # for s in range(diff):
@@ -87,7 +91,7 @@ def check(interval: int):
             webbrowser.open(lesson.zoom_link)
             notifier = ToastNotifier()
             notifier.show_toast(
-                "Auto Zoom", f"lesson: {lesson.name}, password: {lesson.password}", duration=10)
+                "Auto Zoom", f"lesson: {lesson.name}, password: {lesson.password}", duration=15)
             break
     countdown_next_check(interval, now)
     if terminate == False:
@@ -97,8 +101,8 @@ def check(interval: int):
 print("initializing lessons...")
 init_lessons()
 print(f"{len(lessons)} lessons loaded.")
-thread = threading.Thread(target=check, args=[HOUR_IN_SECONDS/4, ])
+thread = threading.Thread(target=check, args=[30, ])
 thread.start()
-input("enter anything to exit\n")
+input("enter anything to exit.\n")
 terminate = True
 print("Done.")
